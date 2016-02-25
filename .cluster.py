@@ -90,7 +90,8 @@ machines = list(chain(
 ))
 
 zookeepers = group('zookeepernodes', [(zk, xrange(N_ZK))])
-namenodes = group('namenodes', [(master, [0,1])])
+namenodes = group('namenodes', [(master, [0])])
+backup_namenodes = group('backup_namenodes', [(master, [1])])
 journalnodes = group('journalnodes', [(master, xrange(N_MASTER))])
 historyservers = group('historyservernodes', [(master, [2])])
 resourcemanagers = group('resourcemanagernodes', [(master, xrange(N_MASTER))])
@@ -106,6 +107,7 @@ monitor = group('monitornodes', [(monitor, xrange(N_MONITOR))])
 inventory = [
     zookeepers,
     namenodes,
+    backup_namenodes,
     journalnodes,
     historyservers,
     resourcemanagers,
