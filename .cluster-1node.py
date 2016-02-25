@@ -29,22 +29,10 @@ defaults = {
 
 
 hadoop = lambda i: {
-    'hadoop%d' % i: {
-        'openstack': {'flavor': 'm1.large',}
-
-    }
+    'hadoop%d' % i: {}
 }
 
 
-from vcl.specification import expand, group, combine, chain
-
-N_ZK = 3
-N_MASTER = 3
-N_DATA = 3
-N_FRONTEND = 1
-N_LOADBALANCER = 0
-N_MONITOR = 1
-N_GLUSTER = 0
 
 machines = [hadoop(0)]
 hostnames = map(lambda n: n.keys()[0], machines)
