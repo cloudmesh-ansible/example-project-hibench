@@ -1,0 +1,32 @@
+- name: prepare_hibench
+  hosts: frontendnodes
+  user: hadoop
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Erase previous results
+      shell: rm -f /home/{{ remote_user }}/HiBench/report/hibench.report
+
+    - name: Prepare Naive Bayes input
+      shell: /home/{{ remote_user }}/HiBench/workloads/bayes/prepare/prepare.sh
+
+    - name: Run Naive Bayes MapReduce benchmark
+      shell: /home/{{ remote_user }}/HiBench/workloads/bayes/mapreduce/bin/run.sh
+
+    - name: Prepare K-Means input
+      shell: /home/{{ remote_user }}/HiBench/workloads/kmeans/prepare/prepare.sh
+ 
+    - name: Run K-Means MapReduce benchmark
+      shell: /home/{{ remote_user }}/HiBench/workloads/kmeans/mapreduce/bin/run.sh
+
+    - name: Plot the results
+      shell: "/home/{{ remote_user }}/HiBench/bin/report_gen_plot.py /home/{{ remote_user }}/HiBench/report/hibench.report"
+
+
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-7-openjdk-amd64
+    MAHOUT_RELEASE: mahout-0.9-cdh5.1.0
+    MAHOUT_EXAMPLE_JOB: "mahout-examples-0.9-cdh5.1.0-job.jar"
+

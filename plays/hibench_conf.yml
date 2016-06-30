@@ -1,0 +1,58 @@
+- name:  HiBench  configuration
+  hosts: frontendnodes
+  user: hadoop
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+
+    - name: add Hadoop home path to HiBench
+      replace:
+        dest: /home/{{remote_user}}/HiBench/conf/99-user_defined_properties.conf
+        regexp: '^hibench.hadoop.home.*\n'
+        replace: 'hibench.hadoop.home   /opt/hadoop\n'
+
+    - name: add Spark home path to HiBench
+      replace:
+        dest: /home/{{remote_user}}/HiBench/conf/99-user_defined_properties.conf
+        regexp: '^hibench.spark.home.*\n'
+        replace: 'hibench.spark.home     /opt/spark\n'
+
+    - name: add HDFS path to HiBench
+      replace:
+        dest: /home/{{remote_user}}/HiBench/conf/99-user_defined_properties.conf
+        regexp: 'hibench.hdfs.master.*\n'
+        replace: 'hibench.hdfs.master     hdfs://futuresystems\n'
+
+    - name: add masters list to conf
+      lineinfile:
+        dest: "/home/{{remote_user}}/HiBench/conf/99-user_defined_properties.conf"
+        line: "hibench.masters.hostnames        master0"
+        create: yes
+
+    - name: add slaves list to conf
+      lineinfile:
+        dest: "/home/{{remote_user}}/HiBench/conf/99-user_defined_properties.conf"
+        line: "hibench.slaves.hostnames         master0 master1 master2"
+        create: yes
+
+    - name: ensure master0 is a known host
+      lineinfile:
+        dest: ~/.ssh/config
+        create: yes
+        line: "Host *\n    StrictHostKeyChecking no"
+
+    - name: Set benchmark scale
+      replace:
+        dest: /home/{{remote_user}}/HiBench/conf/99-user_defined_properties.conf
+        regexp: '^hibench.scale.profile.*\n'
+        replace: 'hibench.scale.profile   {{scale}}\n'
+
+    - name: prepare ploting script
+      replace:
+        dest: /home/{{remote_user}}/HiBench/bin/report_gen_plot.py
+        regexp: '#    plot\(groups'
+        replace: '    plot(groups'
+
+

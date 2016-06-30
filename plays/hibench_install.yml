@@ -1,0 +1,18 @@
+---
+- name: prepare_hibench
+  hosts: frontendnodes
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Download HiBench
+      git: repo=https://github.com/intel-hadoop/HiBench dest=~/HiBench version=master
+
+    - name: Build HiBench
+      shell: cd /home/{{ remote_user }}/HiBench/src && mvn clean package -D spark1.3 -D MR2
+
+    - name: Copy HiBench conf file
+      shell: cd /home/{{ remote_user }}/HiBench/conf && cp 99-user_defined_properties.conf.template 99-user_defined_properties.conf
+
+    - name: chnage owner of the HiBench dir
+      shell: sudo chown hadoop:hadoop -R /home/{{ remote_user }}/HiBench

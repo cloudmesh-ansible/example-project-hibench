@@ -1,0 +1,14 @@
+- name: Install required packages
+  hosts: all
+
+  tasks:
+
+    - name: install packages
+      become: yes
+      apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
+      with_items:
+        #- oracle-java7-installer
+         - maven 
+         - wamerican
+         - python-matplotlib
+

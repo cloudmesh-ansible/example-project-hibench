@@ -1,0 +1,4 @@
+ #Data scale profile: tiny, small, large, huge, gigantic, and bigdata
+ scale: tiny
+ remote_user: cc
+
