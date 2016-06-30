@@ -1,0 +1,6 @@
+---
+- include: plays/commons.yml 
+- include: plays/hibench_install.yml
+- include: plays/hibench_conf.yml
+- include: plays/hibench_run.yml
+
